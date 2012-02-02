@@ -1,0 +1,13 @@
+{% extends "MiddleDisplayObject.htm" %}
+{% load i18n plmapp_tags %}
+
+<!-- Manage html display in the Content div which correspond to the "management" menu + "delegate"-->
+
+{% block content %}
+    {% trans "Select a user for your delegation as : " %}{{role}}
+    {% with replace_management_form as form %}
+        {% include "snippets/undo_form.htm" %}
+    {% endwith %}
+{% endblock %}
+
+

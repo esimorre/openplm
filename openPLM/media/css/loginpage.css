@@ -1,0 +1,62 @@
+/* *************************************************************************************** */
+/*                                  LOGIN PAGE STYLE                                          */
+/* *************************************************************************************** */
+
+
+div.main-box {
+    position:relative;
+    text-align:left;
+    overflow:hidden;
+    font-size: small;
+}
+
+div.top-box-content {
+    position:relative;
+    margin: auto;
+    margin-top: 30px;
+    width: 700px;
+}
+
+div#content-box {
+    width: 700px;
+    padding: 1em;
+    margin: auto;
+      background-color: #C8C6C5;
+}
+
+div#LoginBox {
+    left:0%;
+}
+
+div.legal {
+    text-align:center;
+    margin: 10px;
+}
+
+input.Button, select {
+color: #000000;
+}
+
+h1 {
+    display:inline;
+    font-size: 110%;
+}
+h2 { 
+    font-size: 105%;
+}
+
+/* BOX WE FIND IN THE LOGIN PAGE */
+div#LoginBox
+{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 30px;
+    width: 45%;
+    position: relative;
+    left: 25%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 25px;
+    text-align: center;
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% load i18n plmapp_tags %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html" charset="utf-8"/>
+
+        <link type="text/css" href="/media/css/openplm/jquery-ui.css" rel="Stylesheet" /> 
+        <link rel="stylesheet" type="text/css" href="/media/css/openplm.css" />
+        <link rel="stylesheet" type="text/css" href="/media/css/help.css" />
+        <link rel="stylesheet" href="/media/css/chosen.css" type="text/css" media="screen" charset="utf-8" />
+
+        {% block css %} {% endblock %}
+
+        <title>{% block title %} {% endblock %}</title>
+        <meta name="Robots" content="none"/>
+        <meta name="Author" content="openplm" />
+        <meta name="Classification" content="" />
+        <meta name="Description" content="" />
+        <meta name="keywords" content="" />
+        <script type="text/javascript" src="/media/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/media/js/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/media/js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/media/js/chosen.jquery.min.js"></script>
+        <script type="text/javascript" src="/media/js/combobox.js"></script>
+        <script type="text/javascript" src="/media/js/help.js"></script>
+        <script type="text/javascript" src="/media/js/panels.js"></script>
+        <script type="text/javascript" src="/media/js/confirm.js"></script>
+
+
+        {% block scripts %} {% endblock %}
+
+    </head>
+    <body>
+
+        {% get_current_language as LANGUAGE_CODE %}
+        <div class="main-box" id="Page">
+            <div class="top-box">
+                <div id="LoggedPersonBox">
+                    {% block LoggedPersonBlock %}{% endblock %}
+                </div>
+            </div>
+
+
+
+            <div id="content-box" class="clearfix">
+                <div id="DisplayBox">
+                    <ul>
+
+                        <li>
+                        <input type="checkbox" id="FindButton" />
+                        <label for="FindButton">
+                            {% trans "FIND" %}
+                        </label>
+                        </li>
+                        <li>
+                        <input type="checkbox" id="CreationButton" />
+                        <label for="CreationButton">
+                            {% trans "CREATE" %}
+                        </label>
+                        </li>
+
+
+                        {% if not creation_form %}
+                        {% if navigate_bool %}
+                        <li class="{{"Button"|button:"corner-left,state-active,state-focus"}}" id="NavigateButton">
+                        {% else %}
+                        <li class="{{"Button"|button:"corner-left"}}" id="NavigateButton">
+                        {% endif %}
+                        <a href="{{obj.plmobject_url}}navigate/">
+                            <span class="ui-button-text">{% trans "NAVIGATE" %}</span>
+                        </a>
+                        </li>
+                        {% if navigate_bool %}
+                        <li class="{{"Button"|button:"corner-right"}}" id="StudyButtonOff">
+                        {% else %}
+                        <li class="{{"Button"|button:"corner-right,state-active,state-focus"}}"  id="StudyButtonOn">
+                        {% endif %}
+                        <a href="{{obj.plmobject_url}}attributes/">
+                            <span class="ui-button-text">{% trans "STUDY" %}</span>
+                        </a>
+                        </li>
+                        {% endif %}
+                        <li class="{{"Button"|button}}" id="QuitButton">
+                        <a href="/logout/">
+                            <span class="ui-button-text">{% trans "EXIT" %}</span>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="clearfix">
+
+                    <div id="left-col">
+
+                        <div id="CreationBox">
+                            <h2>{% trans "Create" %}
+                                <div class="toolbar">
+                                    <ul>
+                                    </ul>
+                                </div>
+                            </h2>
+                            {% block CreationBlock %}{% endblock %}
+                        </div>
+
+                        <div id="SearchBox" class="{{link_creation|yesno:"link_creation,"}}">
+                            <h2>{% trans "Search" %}
+                                <div class="toolbar">
+                                    <ul>
+                                        <li>
+                                        <a class="help ui-button ui-button-text-icon-primary ui-state-default ui-button-icon-only ui-corner-all ui-widget" 
+                                            href="/media/help/{{LANGUAGE_CODE}}/search.html" target="_blank">
+                                            <span class="ui-button-icon-primary ui-icon ui-icon-help">&nbsp;</span>
+                                            <span class="ui-button-text">?</span>
+                                        </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </h2>
+                            {% block SearchBlock %}{% endblock %}
+                            <hr/>
+                            {% block ResultBlock %}{% endblock %}
+                        </div>
+
+
+                    </div>
+                    <div id="center-col" class="heightfix">
+
+                        <div id="ActiveBox" class="{{class4div}}">
+                            {% block ObjectBlock %}{% endblock %}
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="bottom-box">
+                <div id="links">
+                    <div class="legal">
+                        2010-2012 openPLM &#0153;
+                        - <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU General Public License</a>
+                    </div>
+                    <a id="linobject" href="http://www.linobject.com">Powered by LinObject</a>
+                </div>                    
+            </div>
+
+        </div>
+    </body>
+</html>

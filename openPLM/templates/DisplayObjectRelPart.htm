@@ -1,0 +1,43 @@
+{% extends "MiddleDisplayObject.htm" %}
+{% load i18n plmapp_tags %}
+
+<!-- Manage html display in the Content div which correspond to the "doc-cad" menu -->
+
+{% block content %}
+    <form method="post" action="">	
+        {{ rel_part_formset.management_form }}
+        {% if is_owner %}
+            <a class="{{"Button"|button}}" href="./add/"><span class="ui-button-text">{% trans "ADD" %}</span></a>
+            {% if rel_part_formset.forms %}
+                <input type="submit" class="{{"Button"|button}}" value="{% trans "DISCONNECT" %}"/>
+            {% endif %}
+        {% endif %}
+        <table class="Content">
+	        {% for form in rel_part_formset.forms %}
+                {{ form.id }}
+                {{ form.document }}
+                {{ form.part }}
+                <tr class="Content">
+                    {% if is_owner %}
+                        <td class="Content" style="width:50px; text-align:center">{{ form.delete }}</td>
+                    {% endif %}
+			        <td class="Content">{{ form.instance.part.type }}</td>
+			        <td class="Content">
+                        <a href="{{ form.instance.part.plmobject_url }}"/>
+			                {{ form.instance.part.reference }}
+		                </a>
+	                </td>
+			        <td class="Content">{{ form.instance.part.revision }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td>
+                        {% trans "There are no parts attached to this document" %}
+                    </td>
+                </tr>
+	        {% endfor %}
+	    </table>
+    </form>
+{% endblock %}
+
+

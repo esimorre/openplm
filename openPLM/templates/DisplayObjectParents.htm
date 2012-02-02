@@ -1,0 +1,40 @@
+{% extends "MiddleDisplayObject.htm" %}
+{% load i18n plmapp_tags %}
+
+<!-- Manage html display in the Content div which correspond to the "parents" menu -->
+
+{% block content %}
+
+    <form method="GET" action="">
+        {% trans "Display :" %}
+        <ul>
+            {{ display_form.as_ul }}
+        </ul>
+        <input type="submit" class="{{"Button"|button}}" value="{% trans "GO !" %}"/><br/>
+    </form>
+	<table class="Content">
+        <tr>
+            <th class="Content"> </th>
+            <th class="Content"> {{ obj.reference }} </th>
+            <th class="Content"> {{ obj.revision }} </th>
+            <th class="Content"> {{ obj.type }} </th>
+            <th class="Content"> {{ obj.name }} </th>
+            <th class="Content"> {{ obj.state.name }} </th>
+        </tr>
+        {% for level, link in parents %}
+        <tr class="Content"> 
+            <td class="Content">-{{ level}}</td>
+            <td class="Content"> 
+                <a href="/object/{{link.parent.type}}/{{link.parent.reference}}/{{link.parent.revision}}/">
+                    {{ link.parent.reference }}
+                </a>
+            </td>
+            <td class="Content"> {{ link.parent.revision }} </td>
+            <td class="Content"> {{ link.parent.type }} </td>
+            <td class="Content"> {{ link.parent.name }} </td>
+            <td class="Content"> {{ link.parent.state.name }} </td>
+        </tr>
+        {% endfor %}
+	</table>
+{% endblock %}
+

@@ -1,0 +1,115 @@
+{% extends "MiddleDisplayObject.htm" %}
+{% load i18n plmapp_tags %}
+{% load comments %}
+
+<!-- Manage html display in the Content div which correspond to the "attributes" menu -->
+
+{% block content %}
+
+    <div>
+        <table class="Content">
+            {% for description,attribute in object_attributes %}
+                <tr class="Content">
+                    <td class="Content description">{{description|capfirst}}</td>
+                    <td class="Content">{{attribute|linebreaks}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    {% if is_owner %}
+        <div class="center">
+            {% ifequal object_type 'User' %}
+                <a class="{{"Button"|button}}" href="/user/{{object_reference}}/modify/"><span class="ui-button-text">{% trans "EDIT" %}</span></a>
+                <a class="{{"Button"|button}}" href="/user/{{object_reference}}/password/"><span class="ui-button-text">{% trans "PASSWORD" %}</span></a>
+            {% else %}
+                {% if obj.is_editable %}
+                    <a class="{{"Button"|button}}" 
+                        href="/object/{{object_type}}/{{object_reference}}/{{object_revision}}/modify/">
+                        <span class="ui-button-text">{% trans "EDIT" %}</span>
+                    </a>
+                {% endif %}
+            {% endifequal %}
+        </div>
+    {% endif %}
+
+    <div id="comments">
+        <h3>{% trans "Comments" %}</h3>
+        <div class="comment_list">
+            {% get_comment_count for obj.object as comment_count %}
+            {% if comment_count %}
+                <p>
+                {% if comment_count == 1 %}
+                    {% blocktrans %}
+                        One comment has been posted.
+                    {% endblocktrans %}
+                {% else %}
+                    {% blocktrans %}
+                        {{ comment_count }} comments have been posted.
+                    {% endblocktrans %}
+                {% endif %}
+                </p>
+
+                {% get_comment_list for obj.object as comment_list %}
+                {% for comment in comment_list %}
+                    <div class="comment">
+                        <span class="comment posted-by">
+                            {% trans "Posted by:" %}
+                            <a href="/user/{{comment.user}}/">{{ comment.user_name }}</a>
+                        </span>
+                        <span class="comment date">
+                            {% trans "Date:" %}
+                            {{ comment.submit_date|date:"r" }}
+                        </span>
+                        <div class="comment_text">
+                            {{ comment.comment|linebreaks }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>
+                {% trans "No comments have been posted yet." %}
+                </p>
+            {% endif %}
+        </div>
+        <div id="comment_form">
+
+            <h4>{% trans "Post a comment" %}</h4>
+
+            {% get_comment_form for obj.object as form %}
+            <div>
+                <form action="{% comment_form_target %}" method="post">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="next" value="{{obj.plmobject_url}}attributes/" />
+
+                        {% for field in form %}
+                            {% if field.is_hidden %}
+                                {{ field }}
+                            {% else %}
+                                {% if field.errors %}
+                                    {{ field.errors }}
+                                {% endif %}
+                                <div
+                                    {% if field.errors %} class="error"{% endif %}
+                                    {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}
+                                    {% ifequal field.name "name" %} style="display:none;"{% endifequal %}
+                                    {% ifequal field.name "email" %} style="display:none;"{% endifequal %}
+                                    {% ifequal field.name "url" %} style="display:none;"{% endifequal %}
+                                    {% ifequal field.name "title" %} style="display:none;"{% endifequal %}
+                                    >
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="submit">
+                            <input type="submit" class="{{"Button"|button}}" name="post" class="submit-post" value="{% trans "Post" %}" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+

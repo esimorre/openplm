@@ -1,0 +1,70 @@
+{% extends "MiddleDisplayObject.htm" %}
+{% load i18n plmapp_tags %}
+
+<!-- Manage html display in the Content div which correspond to the "children" menu -->
+
+{% block scripts %}
+
+    <script type="text/javascript" src="/media/js/bom.js"></script>
+    <script>
+        $(function() {
+            $( "#id_date_0" ).datepicker();
+        });
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    {% if is_owner and obj.is_editable %}
+        <a class="{{"Button"|button}}" href="./add/"><span class="ui-button-text">{% trans "ADD" %}</span></a>
+        <a class="{{"Button"|button}}" href="./edit/"><span class="ui-button-text">{% trans "EDIT" %}</span></a>
+    {% endif %}
+    <form method="GET" action="">
+        {% trans "Display :" %}
+        <ul>
+            {{display_form.as_ul}}
+        </ul>
+        <input type="submit" class="{{"Button"|button}}" value="{% trans "GO !" %}"/>
+    </form>
+    <table class="Content">
+        <tr class="Content">
+            <th class="Content" style="width:50px"> </th>
+            <th class="Content" style="width:50px"> {% trans "Ord." %} </th>
+            <th class="Content" style="width:50px"> {% trans "Qty" %}</th>
+            <th class="Content" style="width:50px"> {% trans "Unit" %}</th>
+            <th class="Content"> {{ obj.reference }} </th>
+            <th class="Content"> {{ obj.revision }} </th>
+            <th class="Content"> {{ obj.type }} </th>
+            <th class="Content"> {{ obj.name }} </th>
+            {% for field, verbose_name in extra_columns %}
+                <th class="Content"> {{ verbose_name|capfirst }} </th>
+            {% endfor %}
+            <th class="Content"> {{ obj.state.name }} </th>
+        </tr>
+        {% for level, link in children %}
+            <tr class="Content"> 
+                <td class="Content expander open level{{level}}" style="padding-left:{{level|add:"-1"}}0px;" >
+                    <span class="expander">↳</span>
+                </td>
+
+                <td class="Content"> {{ link.order }} </td>
+                <td class="Content"> {{ link.quantity }} </td>
+                <td class="Content"> {{ link.get_unit_display }} </td>
+                <td class="Content"> 
+                    <a href="/object/{{link.child.type}}/{{link.child.reference}}/{{link.child.revision}}/">
+                        {{ link.child.reference }}
+                    </a>
+                </td>
+                <td class="Content"> {{ link.child.revision }} </td>
+                <td class="Content"> {{ link.child.type }} </td>
+                <td class="Content"> {{ link.child.name }} </td>
+                {% for field, verbose_name in extra_columns %}
+                    <td class="Content"> {{ extension_data|key:link|key:field }} </td>
+                {% endfor %}
+                <td class="Content"> {{ link.child.state.name }} </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+

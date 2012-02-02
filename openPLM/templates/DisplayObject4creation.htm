@@ -1,0 +1,42 @@
+{% extends "MiddleDisplayObject.htm" %}
+{% load i18n plmapp_tags %}
+
+<!-- Manage html display in the Content div which correspond to the "attributes" menu -->
+
+{% block content %}
+	<h3>{% trans "OBJECT CREATION:" %}</h3>
+		<form method="post" action="." >	
+	<table class="Content">
+		<tr class="Content">
+			<th class="Content">{% trans "Type" %}</th>
+			<td class="Content">{{ object_type }}</td>
+		</tr>
+		<tr class="Content hidden">
+			<th><label for="id_type">&nbsp;</label></th>
+			<td><input id="id_type" type="hidden" name="type" value="{{object_type}}" /></td>
+		</tr>
+        {% for attribute in creation_form.visible_fields %}
+                    {# Include the hidden fields in the form #}
+              {% if forloop.first %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+              {% endif %}
+			<tr class="Content">
+				<th class="Content">{{attribute.label_tag}}</th>
+				<td class="Content">{{attribute}}</td>
+				<td>{{ attribute.errors }}</td>
+			</tr>
+		{% endfor %}
+        <tr class="Content">
+            {% for error in creation_form.non_field_errors %}
+                <td> {{ error }} </td>
+            {% endfor %}
+			<td></td>
+			<td><input type="submit" class="{{"Button"|button}}" value="{% trans "CREATE" %}" /></td>
+		</tr>
+	</table>
+		</form>
+{% endblock %}
+
+
